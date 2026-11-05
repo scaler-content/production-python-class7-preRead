@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class 7 Pre-Read</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #faf6ef; --card: #fffdf9; --text: #2e2820; --muted: #6e6455;
+    --accent: #b4532a; --accent-soft: #f8ebe0; --border: #e8dfd0;
+    --code-bg: #f4eee2; --code-text: #2e2820;
+    --ok: #2f7a47; --ok-soft: #e8f2e3; --warn: #94590a; --warn-soft: #fbeed0;
+    --bad: #b3261e; --bad-soft: #fbe6e1; --shadow: 0 1px 3px rgba(80,55,20,.10);
+  }
+  
+    * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 118px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; font-size: 17px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 18px 80px; }
+  header.hero { padding: 38px 0 18px; }
+  .kicker { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { font-size: 34px; line-height: 1.2; margin: 6px 0 10px; }
+  .lead { color: var(--muted); font-size: 18px; margin: 0 0 12px; }
+  .pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .pill { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 4px 12px; font-size: 14px; font-weight: 600; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--bg);
+    border-bottom: 1px solid var(--border); padding: 8px 0 8px;
+  }
+  .topbar .wrap { padding-bottom: 0; }
+  .progress { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+  .progress > div { height: 100%; width: 0; background: var(--ok); transition: width .3s ease; }
+  nav { display: flex; gap: 6px; flex-wrap: wrap; font-size: 14px; }
+  nav a {
+    text-decoration: none; color: var(--muted); padding: 3px 10px; border-radius: 99px;
+    border: 1px solid var(--border); background: var(--card);
+  }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav a.done { color: var(--ok); border-color: var(--ok); }
+  .pct { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+
+  section.card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 24px; margin: 22px 0; box-shadow: var(--shadow);
+  }
+  section.card h2 { font-size: 25px; margin: 0 0 4px; line-height: 1.25; }
+  .num { color: var(--accent); }
+  h3 { font-size: 19px; margin: 26px 0 6px; }
+  p { margin: 8px 0; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 14px 0; border-left: 5px solid; }
+  .callout.tip { background: var(--accent-soft); border-color: var(--accent); }
+  .callout.warn { background: var(--warn-soft); border-color: var(--warn); }
+  .callout.ok { background: var(--ok-soft); border-color: var(--ok); }
+  .callout strong.t { display: block; margin-bottom: 2px; }
+
+  code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 5px; font-size: .92em; }
+  .codeblock { position: relative; margin: 12px 0; }
+  .codeblock pre {
+    margin: 0; background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-size: 15px; line-height: 1.5;
+  }
+  .codeblock .label { font-size: 13px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  .copy {
+    position: absolute; top: 8px; right: 8px; font-size: 12px; padding: 3px 9px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer;
+  }
+  .copy:hover { color: var(--accent); border-color: var(--accent); }
+  .placeholder {
+    background: var(--warn-soft); color: var(--warn); border: 1px dashed var(--warn);
+    padding: 0 6px; border-radius: 5px; font-weight: 600; white-space: nowrap;
+  }
+
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); color: var(--accent); }
+  .tablewrap { overflow-x: auto; }
+
+  /* tabs */
+  .tabs { margin: 14px 0; }
+  .tablist { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .tablist button {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 7px 16px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  }
+  .tablist button[aria-selected="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  
+  .tabpanel { display: none; }
+  .tabpanel.active { display: block; }
+  .steps { counter-reset: s; list-style: none; padding-left: 0; }
+  .steps li { counter-increment: s; position: relative; padding-left: 38px; margin: 10px 0; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; display: grid; place-items: center;
+  }
+  
+
+  /* diagrams */
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; margin: 14px 0; }
+  .flow .box {
+    flex: 1 1 150px; border: 2px solid var(--accent); border-radius: 12px; padding: 10px 12px; background: var(--accent-soft);
+  }
+  .flow .box b { display: block; color: var(--accent); font-size: 18px; }
+  .flow .arrow { align-self: center; font-size: 22px; color: var(--accent); }
+
+  .anatomy { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .anatomy span { padding: 6px 10px; border-radius: 8px; font-size: 15px; }
+  .a-prompt { background: #3b4a6b; color: #fff; }
+  .a-cmd { background: #1f7a3a; color: #fff; }
+  .a-out { background: var(--code-bg); border: 1px solid var(--border); color: var(--code-text); }
+  .legend { font-size: 14px; color: var(--muted); }
+
+  .tasks { list-style: none; padding: 0; margin: 10px 0; }
+  .tasks li { padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; margin: 6px 0; display: flex; gap: 10px; align-items: center; background: var(--card); }
+  .tasks li .ck { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: grid; place-items: center; font-size: 13px; flex: none; }
+  .tasks li.done { background: var(--ok-soft); border-color: var(--ok); }
+  .tasks li.done .ck { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .btn {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 8px 16px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  
+  .btn.ghost { background: transparent; color: var(--accent); }
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .hint { min-height: 24px; font-size: 15px; margin: 6px 0; }
+  .hint.good { color: var(--ok); } .hint.bad { color: var(--bad); }
+
+  /* chips / cards */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .chip {
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 16px; padding: 7px 14px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .readout { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; min-height: 64px; }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 680px) { .twocol { grid-template-columns: 1fr; } }
+  .panel { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--card); }
+  .panel h4 { margin: 0 0 6px; font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .cardgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 680px) { .cardgrid { grid-template-columns: 1fr; } }
+
+  /* quiz */
+  .quiz .q { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin: 12px 0; background: var(--card); }
+  .quiz .q p.qt { margin: 0 0 8px; font-weight: 600; }
+  .quiz .opt {
+    display: block; width: 100%; text-align: left; font: inherit; font-size: 16px; padding: 8px 12px; margin: 6px 0; cursor: pointer;
+    border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  .quiz .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .quiz .opt.right { background: var(--ok-soft); border-color: var(--ok); }
+  .quiz .opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .quiz .fb { font-size: 15px; margin-top: 6px; }
+  .score { font-size: 20px; font-weight: 700; margin: 10px 0; }
+
+  .donebar { display: flex; align-items: center; gap: 12px; margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border); flex-wrap: wrap; }
+  .donebtn {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 7px 14px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--ok); color: var(--ok); background: transparent;
+  }
+  .donebtn[aria-pressed="true"] { background: var(--ok); color: #fff; }
+  
+  footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 30px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* ---- additions for Class 2 ---- */
+  /* sorter */
+  .sorter { margin: 14px 0; }
+  .sorter .pool { display: flex; gap: 8px; flex-wrap: wrap; min-height: 44px; padding: 10px; border: 1px dashed var(--border); border-radius: 10px; background: var(--card); }
+  .sorter .pool .chip { font-size: 15px; }
+  .sorter .pool .empty { color: var(--ok); font-weight: 600; }
+  .sorter .bins { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+  .sorter .bins.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 680px) { .sorter .bins, .sorter .bins.two { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .sorter .bins, .sorter .bins.two { grid-template-columns: 1fr; } }
+  .sorter .bin {
+    font: inherit; text-align: left; cursor: pointer; border: 2px solid var(--border); border-radius: 12px; padding: 10px 12px;
+    background: var(--card); color: var(--text); min-height: 84px;
+  }
+  .sorter .bin:hover { border-color: var(--accent); }
+  .sorter .bin b { display: block; color: var(--accent); font-size: 16px; margin-bottom: 2px; }
+  .sorter .bin .why { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .sorter .bin .placed { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sorter .bin .placed span { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--ok-soft); border: 1px solid var(--ok); color: var(--ok); border-radius: 6px; padding: 0 6px; }
+  .sorter .bin.flash { border-color: var(--bad); background: var(--bad-soft); }
+  .chip.sel { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+
+  /* folder explorer */
+  .explorer { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 12px; }
+  @media (max-width: 680px) { .explorer { grid-template-columns: 1fr; } }
+  .explorer .tree button {
+    display: block; width: 100%; text-align: left; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 15px;
+    background: transparent; border: none; padding: 5px 8px; border-radius: 8px; cursor: pointer; color: var(--text);
+  }
+  .explorer .tree button.f { color: var(--accent); font-weight: 600; }
+  .explorer .tree button[aria-pressed="true"] { background: var(--accent-soft); }
+  .explorer .tree .ind { padding-left: 22px; }
+  .explorer .tree .dim { color: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 14px; padding: 2px 8px 2px 30px; }
+
+  /* layers */
+  .layers .l { border-radius: 10px; padding: 10px 14px; margin: 6px 0; border: 1px solid var(--border); }
+  .layers .l1 { background: var(--ok-soft); border-color: var(--ok); }
+  .layers .l2 { background: var(--warn-soft); border-color: var(--warn); }
+  .layers .l3 { background: var(--accent-soft); border-color: var(--accent); }
+  .layers b { display: block; }
+
+  .tasks li { align-items: flex-start; }
+  .tasks li .tx { min-width: 0; overflow-wrap: anywhere; }
+  .tasks li .tx code { white-space: normal; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+    <p class="pct" id="pct">Progress: 0 of 8 sections marked done</p>
+    <nav id="nav" aria-label="Sections">
+      <a href="#s1" data-s="s1">1 Welcome</a>
+      <a href="#s2" data-s="s2">2 Big idea</a>
+      <a href="#s3" data-s="s3">3 Tools</a>
+      <a href="#s4" data-s="s4">4 Project</a>
+      <a href="#s5" data-s="s5">5 pytest</a>
+      <a href="#s6" data-s="s6">6 A bug, a test</a>
+      <a href="#s7" data-s="s7">7 CI and AI</a>
+      <a href="#s8" data-s="s8">8 Check yourself</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">FDE Module 2 &middot; Pre-read for Class 7</div>
+  <h1>Prove It Works: Testing &amp; CI</h1>
+  <p class="lead">In Class 6 you proved a change was safe by running checks yourself and comparing file fingerprints. In Class 7 you hand that job to a machine. You will turn a real bug into a permanent test, test the AI part with a fake model that needs no key, and set up a check that runs on every pull request. Read this before class, then arrive with your tools ready.</p>
+  <div class="pills">
+    <span class="pill">About 40 minutes</span>
+    <span class="pill">Check your tools</span>
+    <span class="pill">Quick games and a short quiz</span>
+  </div>
+</header>
+
+<!-- ================= 1 WELCOME ================= -->
+<section class="card" id="s1">
+  <h2><span class="num">1.</span> Welcome</h2>
+  <p>In Class 6 your project became something a team can <strong>change safely</strong>, because you ran the proof by hand. Imagine a teammate is in a hurry next month. Nothing makes them run those commands. The Operations lead asks: <em>"What stops a bad change from reaching main?"</em> Today the honest answer is: <em>a person remembering</em>. In Class 7 the answer becomes a set of checks that run on every change, and that block an unsafe one.</p>
+  <p>By the end of class you will have:</p>
+  <div class="cardgrid">
+    <div class="panel">
+      <h4>You will learn to</h4>
+      <ul>
+        <li>Write clearer tests with <strong>parametrize</strong>, <strong>fixtures</strong> and <code>pytest.raises</code></li>
+        <li>Turn a <strong>real bug</strong> into a test that fails first, then fix it</li>
+        <li>Test the AI boundary with a <strong>fake model</strong>, so no key or network is needed</li>
+        <li>Open a <strong>pull request</strong> that GitHub Actions checks with ruff, mypy and pytest</li>
+        <li>Write a short <strong>PR description</strong>, and explain a failed check in plain words</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h4>You do not need to</h4>
+      <ul>
+        <li>Memorise any command. We type them together in class</li>
+        <li>Know GitHub Actions or Hypothesis. We explain each from scratch</li>
+        <li>Have an API key. The AI is never run live in class</li>
+        <li>Create a new account, if you already have a GitHub account</li>
+        <li>Pay for anything</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout tip"><strong class="t">How to use this page</strong>
+    Go in order. Section 3 is the one to finish <strong>before</strong> class, because it checks your Class 6 project and your GitHub repository. Click the small interactive boxes, since they help you remember. Press <em>Mark as done</em> at the end of each section. If a step fails, write down what you saw and tell your instructor. Please do not spend more than 15 minutes stuck on any one thing.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s1" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 2 BIG IDEA ================= -->
+<section class="card" id="s2">
+  <h2><span class="num">2.</span> The big idea: a safety net that runs without you</h2>
+  <p>A bakery checks every loaf by hand. It works while the owner is there. On the day she is ill, a new helper bakes, nobody checks, and a tray of undercooked bread goes out. A better bakery puts a thermometer in the oven that beeps by itself. The checks are the same ones as before. What changed is that nobody has to remember them.</p>
+  <p>Our Workbench already has 114 checks. The gap is that they only run if a person types the command. Click each item to see how it hurts, and how Class 7 closes the gap.</p>
+  <div class="chips" id="hideChips">
+    <button class="chip" data-i="0" aria-pressed="false">A teammate forgets to run the tests</button>
+    <button class="chip" data-i="1" aria-pressed="false">A bug we fixed comes back</button>
+    <button class="chip" data-i="2" aria-pressed="false">A bug nobody has seen yet</button>
+    <button class="chip" data-i="3" aria-pressed="false">A test that quietly calls the real model</button>
+    <button class="chip" data-i="4" aria-pressed="false">A check that is sometimes red for no reason</button>
+  </div>
+  <div class="readout" id="hideOut" aria-live="polite">Click an item above.</div>
+
+  <h3>The three promises of Class 7</h3>
+  <div class="flow" aria-label="Three promises">
+    <div class="box"><b>1. See it fail first</b>A bug becomes a test that is red before the fix and green after</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>2. Fake what you cannot control</b>A fake model replaces the real one in every routine test</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>3. Let the machine run it</b>The same three commands run on every pull request</div>
+  </div>
+
+  <div class="callout warn"><strong class="t">What we will not do in Class 7</strong>
+    No live model calls: every model reply is recorded or faked, so everything works on your laptop with no key. No coverage tools, no pre-commit hooks, no deployment, and no model that grades another model. That last one is discussed, not built.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s2" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 3 TOOLS ================= -->
+<section class="card" id="s3">
+  <h2><span class="num">3.</span> Check your tools</h2>
+  <p>Most of the setup is in class. Before class you only need to confirm four things. Allow about 15 minutes.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What</th><th>Why it matters</th><th>Ready when</th></tr>
+    <tr><td><strong>Python</strong></td><td>Runs the program. The project is built, tested and checked on Python 3.11</td><td><span class="placeholder">3.11</span></td></tr>
+    <tr><td><strong>Your Class 6 project</strong></td><td>Class 7 builds on it, one test file at a time</td><td>It runs, <code>pytest</code> shows <code>114 passed</code>, and the evaluation prints <code>eval set eval-6fb4ed4a, prompt v2, mode recorded, 10 cases</code></td></tr>
+    <tr><td><strong>Starter Files for Class 7</strong></td><td>A fake-model helper, a pull request template, and updated setup files that add one library, <code>hypothesis</code></td><td>Downloaded from the link your instructor shares, and unzipped. Do not copy them over your project yet</td></tr>
+    <tr><td><strong>A GitHub account, and a repository</strong></td><td>You push a branch and open a pull request</td><td>You can sign in at github.com, and your Class 6 work is pushed to a <strong>private</strong> repository where you can open the <em>Actions</em> tab</td></tr>
+  </table>
+  </div>
+
+  <h3>3.1 Check Python and Git</h3>
+  <p>Open a terminal and run the commands for your system. Please use Python 3.11. The tests and ruff also work on 3.12 and 3.13, but the type check (mypy) stops with an error there, so the workflow in class uses 3.11.</p>
+  <div class="tabs" data-tabs="pyver">
+    <div class="tablist" role="tablist" aria-label="Operating system">
+      <button role="tab" aria-selected="true" data-tab="win">Windows</button>
+      <button role="tab" aria-selected="false" data-tab="mac">Mac and Linux</button>
+    </div>
+    <div class="tabpanel active" data-panel="win">
+      <div class="codeblock"><div class="label">Windows PowerShell</div><button class="copy">Copy</button><pre>py --version
+# You should see something like: Python 3.11.9
+git --version
+# You should see something like: git version 2.45.0</pre></div>
+    </div>
+    <div class="tabpanel" data-panel="mac">
+      <div class="codeblock"><div class="label">macOS or Linux</div><button class="copy">Copy</button><pre>python3 --version
+# You should see something like: Python 3.11.9
+git --version
+# You should see something like: git version 2.45.0</pre></div>
+    </div>
+  </div>
+  <p>If the Python number is 3.10 or lower, install Python 3.11 from <span class="placeholder"><a href="https://www.python.org/downloads/" style="text-decoration: none; color: inherit;">python.org/downloads/</a></span> before class. On Windows, tick <strong>"Add python.exe to PATH"</strong> on the first screen of the installer. If <code>git</code> is not found, install it from <span class="placeholder"><a href="https://git-scm.com/downloads" style="text-decoration: none; color: inherit;">git-scm.com/downloads</a></span>.</p>
+
+  <h3>3.2 Check that your Class 6 project still passes</h3>
+  <p>Open your project folder in VS Code and make sure your virtual environment is active. On Windows use <code>py</code> instead of <code>python3</code> if <code>python</code> is not found.</p>
+  <div class="codeblock"><div class="label">From the project root, with the environment active</div><button class="copy">Copy</button><pre>python -m pytest -q
+# Expected: a last line that says 114 passed
+
+python -m meridian_workbench.evaluation
+# Expected: a first line that says
+# eval set eval-6fb4ed4a, prompt v2, mode recorded, 10 cases</pre></div>
+
+  <h3>3.3 Check GitHub</h3>
+  <p>Sign in at github.com. Open your project repository, and click the <strong>Actions</strong> tab. If you see it, you are ready. If the repository is not on GitHub yet, create an empty <strong>private</strong> repository, and push your Class 6 work to it.</p>
+  <div class="callout tip"><strong class="t">A note about GitHub plans</strong>
+    On the free plan, a private repository can run checks and show them green or red, but it cannot <em>force</em> them to pass before a merge. That setting needs a paid plan. We will talk about what this means in class. You can do everything else with a free account.
+  </div>
+
+  <div class="callout ok"><strong class="t">Do not install anything new yet</strong>
+    In class you will run <code>python -m pip install -r requirements.txt</code> once, after copying the starter pack. It adds one library, <code>hypothesis==6.115.0</code>. Nothing else is needed.
+  </div>
+
+  <h3>If something goes wrong</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What you see</th><th>Likely cause and fix</th></tr>
+    <tr><td>"Python was not found", or the version is 3.10 or lower</td><td>Install Python 3.11 from python.org, then open a new terminal and check again.</td></tr>
+    <tr><td>The program fails with <code>ModuleNotFoundError</code></td><td>Your virtual environment is not active. Activate it, then run the program again.</td></tr>
+    <tr><td>The tests do not show <code>114 passed</code></td><td>Do not fix it alone. Tell your instructor which test failed, and bring the last line of the error.</td></tr>
+    <tr><td>The evaluation prints a different eval set or prompt version</td><td>Your copy may not be the finished Class 6 project. Tell your instructor before class.</td></tr>
+    <tr><td>You do not see an <strong>Actions</strong> tab on GitHub</td><td>You may be on the wrong page, or Actions is switched off for the repository. Open <em>Settings</em>, then <em>Actions</em>, and allow actions. Tell your instructor if it still does not show.</td></tr>
+    <tr><td>Your Class 6 work is not on GitHub</td><td>Push it now, or tell your instructor. We create a branch and open a pull request in class.</td></tr>
+  </table>
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s3" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 4 PROJECT ================= -->
+<section class="card" id="s4">
+  <h2><span class="num">4.</span> Where the new pieces go</h2>
+  <p>Class 7 adds mostly tests, one workflow file, and two small changes to the code. Click a folder to see what goes in it.</p>
+  <div class="explorer">
+    <div class="panel tree" id="treeBox">
+      <button class="f" data-d="root" aria-pressed="true">meridian-workbench/</button>
+      <div class="ind">
+        <button class="f" data-d="src" aria-pressed="false">src/meridian_workbench/</button>
+        <button class="f" data-d="tests" aria-pressed="false">tests/</button>
+        <button class="f" data-d="github" aria-pressed="false">.github/</button>
+        <button class="f" data-d="docs" aria-pressed="false">docs/</button>
+        <button data-d="files" aria-pressed="false">pyproject.toml, requirements.txt &hellip;</button>
+      </div>
+    </div>
+    <div class="panel"><h4 id="treeTitle">The whole project</h4><div id="treeText"></div></div>
+  </div>
+  <div class="callout tip"><strong class="t">Picture it</strong>
+    A smoke alarm. Class 6 gave the Workbench good wiring. Class 7 fits an alarm that sounds by itself, and a list on the wall of every fire we have had, so none of them is forgotten.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s4" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 5 PYTEST ================= -->
+<section class="card" id="s5">
+  <h2><span class="num">5.</span> pytest done properly, and five kinds of check</h2>
+  <p>You have written pytest checks since Class 2. Today we make them easier to read when they fail. Two features do most of the work. <strong>Parametrize</strong> runs one check for many inputs, and names each run by its input. A <strong>fixture</strong> is set-up that pytest builds for a test that asks for it by name, and tidies up afterwards. Think of a stage hand who puts the chairs out before the show: the actors only say, "I need a chair".</p>
+  <div class="codeblock"><div class="label">One check, five inputs, five named results (you will write this in class)</div><button class="copy">Copy</button><pre>@pytest.mark.parametrize("raw", ["1.250", "1,250.00", "NaN", "Infinity", "-3.00"])
+def test_amount_refuses_anything_but_two_decimal_places(raw):
+    with pytest.raises(MalformedRecord, match="must look like 19.99"):
+        parse_amount(raw)</pre></div>
+  <p>A loop inside one test stops at the first failure and does not say which value failed. Parametrize makes five tests, so all five run, and a failure shows its input in its name, such as <code>[19.99]</code>. The <code>match=</code> part checks the <em>reason</em> in the message, so a refusal for the wrong reason does not pass.</p>
+
+  <h3>Parametrize or fixture?</h3>
+  <p>Click an item, then click the bin it belongs in.</p>
+  <div class="sorter" id="sortKinds"></div>
+
+  <h3>Five kinds of check</h3>
+  <p>A red check is only useful if you know what it means. We name five kinds, by the question each one asks. Click a kind.</p>
+  <div class="chips" id="closeChips">
+    <button class="chip" data-i="0" aria-pressed="false">Unit</button>
+    <button class="chip" data-i="1" aria-pressed="false">Contract</button>
+    <button class="chip" data-i="2" aria-pressed="false">Regression</button>
+    <button class="chip" data-i="3" aria-pressed="false">End to end</button>
+    <button class="chip" data-i="4" aria-pressed="false">Capability</button>
+  </div>
+  <div class="readout" id="closeOut" aria-live="polite">Click a kind above.</div>
+
+  <div class="callout tip"><strong class="t">Why this matters today</strong>
+    Each kind gets a <strong>marker</strong>, such as <code>@pytest.mark.regression</code>. You can then run one kind alone, for example <code>python -m pytest -q -m contract</code>. A misspelled marker is an error, not a silent mistake, because the project turns on <code>--strict-markers</code>.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s5" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 6 A BUG, A TEST ================= -->
+<section class="card" id="s6">
+  <h2><span class="num">6.</span> A bug becomes a test, before it becomes a fix</h2>
+  <p>Here is a rule that saves hours: when you find a bug, <strong>write the test first</strong>, and watch it fail. A test you have never seen fail may be a test that cannot fail. Then fix the code, and watch the same test pass. A test written for a failure we have really seen is a <strong>regression test</strong>: it keeps that failure from coming back. Think of a bandage with a date on it.</p>
+  <p>We have a real one to work on. In Python, the pattern <code>\d</code> means "any digit", and that includes digits from other scripts. So the Workbench, written with <code>\d</code> since Class 2, accepted some numbers it should have refused:</p>
+  <div class="codeblock"><div class="label">The bug you will see in class</div><pre>parse_units('&#1633;&#1634;')   -&gt;  12
+parse_amount('&#1633;&#1641;.&#1641;&#1641;') -&gt;  Decimal('19.99')</pre></div>
+  <p>Those are Arabic-Indic digits. The fix is small: write <code>[0-9]</code> instead of <code>\d</code>. The point of the class is the order of the steps.</p>
+
+  <h3>Before the fix, or after the fix?</h3>
+  <p>Click an item, then click the bin that says when it should be true.</p>
+  <div class="sorter" id="sortWrap"></div>
+
+  <h3>Which input is accepted?</h3>
+  <p>Click an input. Choose what the Workbench did <em>before</em> the fix, and what it must do after.</p>
+  <div class="chips" id="stackChips">
+    <button class="chip" data-i="0" aria-pressed="false">Units written as <code>12</code></button>
+    <button class="chip" data-i="1" aria-pressed="false">Units written as <code>&#1633;&#1634;</code></button>
+    <button class="chip" data-i="2" aria-pressed="false">A case ID <code>C-&#1633;&#1634;&#1635;&#1636;</code></button>
+    <button class="chip" data-i="3" aria-pressed="false">A date <code>&#1634;&#1632;&#1634;&#1637;-&#1632;&#1635;-&#1632;&#1639;</code></button>
+  </div>
+  <div class="readout" id="stackOut" aria-live="polite">Click an input above.</div>
+
+  <div class="callout tip"><strong class="t">Properties find bugs too</strong>
+    A <strong>property-based test</strong> says something that must be true for <em>every</em> input in a family, and a library called Hypothesis tries hundreds. If one breaks the rule, it shrinks that input to the smallest one that still fails. In class you write one property, and see that the same idea would have found this bug in under a second.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s6" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 7 CI AND AI ================= -->
+<section class="card" id="s7">
+  <h2><span class="num">7.</span> A check on every pull request, and a fake model for the AI part</h2>
+  <h3>Branch, pull request, checks, merge</h3>
+  <p>You work on a <strong>branch</strong>, a copy of the project where changes are safe. You open a <strong>pull request</strong>, a page that asks to merge the branch into <code>main</code> and keeps the change, the checks and the discussion together. <strong>Continuous integration (CI)</strong> is a service that runs the checks on a clean machine every time. Ours is GitHub Actions. Think of a fresh kitchen for every recipe test: if it works there, it does not depend on what is left in yours.</p>
+  <div class="flow" aria-label="Branch to merge">
+    <div class="box"><b>Branch</b>Your change, away from main</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>Pull request</b>Problem, change, evidence, affected checks</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>Checks</b>ruff, mypy, pytest, on a clean machine</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>Merge</b>Only when everything is green</div>
+  </div>
+
+  <h3>Fake models</h3>
+  <p>A model is the one part we do not control. Its answer can be good, cut off, off-list, late, a refusal, or a polite "I cannot tell". A <strong>fake model</strong> is a small function that returns exactly the reply we script, and no key or network is needed. In class one table covers all six outcomes, and it finds a real waste: a refusal used to trigger a pointless repair call.</p>
+
+  <h3>What runs where?</h3>
+  <p>Routine checks must be free of keys and networks, or a red check could be caused by something outside our code, and people would learn to ignore red. Click an item, then click where it belongs.</p>
+  <div class="sorter" id="sortRetry"></div>
+
+  <h3>Reading a red line</h3>
+  <p>A red check has a reader who was not there when it failed. Click a line to see what it usually means.</p>
+  <div class="chips" id="traceChips">
+    <button class="chip" data-i="0" aria-pressed="false">Failed: DID NOT RAISE</button>
+    <button class="chip" data-i="1" aria-pressed="false">assert 2 == 1</button>
+    <button class="chip" data-i="2" aria-pressed="false">Passes on my laptop, red in CI</button>
+    <button class="chip" data-i="3" aria-pressed="false">[XPASS(strict)]</button>
+    <button class="chip" data-i="4" aria-pressed="false">'regresion' not found in markers</button>
+  </div>
+  <div class="readout" id="traceOut" aria-live="polite">Click a line above.</div>
+
+  <div class="callout warn"><strong class="t">The rule of the class</strong>
+    Write the check. Watch it fail for the <strong>right reason</strong>. Fix. Watch it pass. Then run everything. Every confirmed failure ends as a test, an evaluation case or a guardrail, so it cannot return without turning something red.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s7" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 8 CHECK ================= -->
+<section class="card" id="s8">
+  <h2><span class="num">8.</span> Check yourself</h2>
+  <p>Five quick questions. They are not graded. They show you what to look at again. You can retry as often as you like.</p>
+  <div class="quiz" id="finalQuiz"></div>
+  <div class="score" id="finalScore" aria-live="polite"></div>
+
+  <h3>Before Class 7: your checklist</h3>
+  <ul class="tasks" id="finalChecks">
+    <li data-check="1"><span class="ck"></span>Python 3.11 is installed, and the version command shows it</li>
+    <li data-check="2"><span class="ck"></span>My Class 6 project shows <code>114 passed</code>, and the evaluation prints <code>eval set eval-6fb4ed4a, prompt v2, mode recorded, 10 cases</code></li>
+    <li data-check="3"><span class="ck"></span>I downloaded the Starter Files for Class 7 and unzipped them</li>
+    <li data-check="4"><span class="ck"></span>My Class 6 work is pushed to a private GitHub repository, and I can see its <em>Actions</em> tab</li>
+    <li data-check="5"><span class="ck"></span>I can say why parametrize is better than a loop in one test</li>
+    <li data-check="6"><span class="ck"></span>I can explain why a regression test must fail before the fix</li>
+    <li data-check="7"><span class="ck"></span>I know why routine tests use a fake model, not a real one</li>
+    <li data-check="8"><span class="ck"></span>I tried the games and answered the quiz</li>
+  </ul>
+  <p class="small muted">Click an item to tick it. Your ticks are saved in this browser only.</p>
+
+  <div class="callout ok"><strong class="t">What happens next</strong>
+    In Class 7 you will rewrite tests with parametrize and fixtures, turn the digits bug into a regression test, cover reconciliation and reruns, write one Hypothesis property, open a pull request with a GitHub Actions workflow, test six model outcomes with a fake model, and write a pull request description from real evidence. Send your instructor a note if any step above did not work.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s8" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<footer>FDE Module 2 &middot; Class 7 pre-read</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  /* ---------- tabs ---------- */
+  $$('.tabs').forEach(function (box) {
+    var btns = $$('[role="tab"]', box), panels = $$('.tabpanel', box);
+    function show(name) {
+      btns.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false'); });
+      panels.forEach(function (p) { p.classList.toggle('active', p.dataset.panel === name); });
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.tab); }); });
+    box._show = show;
+  });
+  try {
+    var plat = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '').toLowerCase();
+    var b1 = $('[data-tabs="pyver"]');
+    if (b1 && b1._show) b1._show(plat.indexOf('win') > -1 ? 'win' : 'mac');
+  } catch (e) { /* ignore */ }
+
+  /* ---------- copy buttons ---------- */
+  $$('.codeblock').forEach(function (cb) {
+    var btn = $('.copy', cb), pre = $('pre', cb);
+    if (!btn || !pre) return;
+    btn.addEventListener('click', function () {
+      var text = pre.textContent;
+      function ok() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1400); }
+      function fallback() {
+        var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); ok(); } catch (e2) { btn.textContent = 'Select and copy'; }
+        document.body.removeChild(ta);
+      }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(ok, fallback); }
+        else { fallback(); }
+      } catch (e) { fallback(); }
+    });
+  });
+
+  /* ---------- progress (per viewer, saved in this browser only) ---------- */
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem('c7preread') || '{}') || {}; } catch (e) { done = {}; }
+  function save() { try { localStorage.setItem('c7preread', JSON.stringify(done)); } catch (e) { /* ignore */ } }
+  function refresh() {
+    var ids = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'], n = 0;
+    ids.forEach(function (id) {
+      var on = !!done[id]; if (on) n++;
+      $$('[data-done="' + id + '"]').forEach(function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.textContent = on ? 'Done ✓' : 'Mark as done'; });
+      var a = $('nav a[data-s="' + id + '"]'); if (a) a.classList.toggle('done', on);
+    });
+    $('#bar').style.width = Math.round(n / ids.length * 100) + '%';
+    $('#pct').textContent = 'Progress: ' + n + ' of ' + ids.length + ' sections marked done';
+  }
+  $$('[data-done]').forEach(function (b) {
+    b.addEventListener('click', function () { done[b.dataset.done] = !done[b.dataset.done]; save(); refresh(); });
+  });
+  try { refresh(); } catch (e) { /* ignore */ }
+
+  /* ---------- generic chip readout ---------- */
+  function chipReadout(chipSel, outSel, data, fixLabel) {
+    $$(chipSel).forEach(function (c) {
+      c.addEventListener('click', function () {
+        $$(chipSel).forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        c.setAttribute('aria-pressed', 'true');
+        var h = data[+c.dataset.i];
+        $(outSel).innerHTML = '<strong>' + h[0] + '</strong><br>' + h[1] + '<br><strong style="color:var(--ok)">' + fixLabel + '</strong> ' + h[2];
+      });
+    });
+  }
+  chipReadout('#hideChips .chip', '#hideOut', [["A teammate forgets to run the tests", "The checks exist, but they run only when a person types the commands. On a busy Friday, nobody does, and a change goes to <code>main</code> unchecked.", "A GitHub Actions workflow runs <code>ruff</code>, <code>mypy</code> and <code>pytest</code> on every pull request. Nobody has to remember."], ["A bug we fixed comes back", "A fix is made, and a month later a tidy-up undoes it. Nothing turns red, because nothing ever tested that exact case.", "A regression test for each failure we have really seen. It fails before the fix, and passes after, so the failure cannot return quietly."], ["A bug nobody has seen yet", "Digits from other scripts, such as <code>&#1633;&#1634;</code>, were accepted as numbers since Class 2. No test used such an input, so nobody asked the question.", "A property-based test lets a library try many inputs. It finds a bug like this in under a second, and we then keep it as a regression test."], ["A test that quietly calls the real model", "It passes on a laptop with a key, fails in CI with no key, and costs money when it does run. The answer also changes from day to day.", "A fake model for every routine test, and a closed network. A test that tries to connect fails at once, with a message that says why."], ["A check that is sometimes red for no reason", "People learn to ignore a red check that is often wrong. Then they also ignore the one that is right.", "Routine checks use fakes and recorded replies, so they are the same every time. Harder, changing questions are kept apart, as capability cases."]], 'The fix:');
+
+  /* ---------- section 4: folder explorer ---------- */
+  var DIRS = {"root": ["The whole project", "The Class 6 layout stays. Class 7 adds mostly tests, a workflow file and two small changes to the code. Click a folder to see what changes."], "src": ["src/meridian_workbench/", "Two small changes, both made on purpose. In <code>parsing.py</code> and <code>contracts.py</code>, six patterns change from <code>\\d</code> to <code>[0-9]</code>, so digits from other scripts are refused. In <code>ai_client.py</code>, a reply that is a refusal now ends after one call instead of two. No new source file is added."], "tests": ["tests/", "The biggest change. <code>fakes.py</code> (the fake model) is in your starter pack. You write the rest in class: <code>test_regressions.py</code>, <code>test_model_boundary.py</code>, <code>test_reconcile.py</code>, <code>test_properties.py</code> and <code>test_capability.py</code>. <code>test_parsing.py</code> is rewritten with parametrize, and <code>conftest.py</code> gains two fixtures. At the end there are 154 checks, and one that is expected to fail."], "github": [".github/", "Two files. <code>workflows/ci.yml</code> tells GitHub Actions to run ruff, mypy and pytest on every pull request and every push to <code>main</code>. <code>pull_request_template.md</code> gives every pull request four headings: Problem, Change, Evidence and Affected checks. The template is in your starter pack. You write the workflow in class."], "docs": ["docs/", "<code>testing_policy.md</code> is new. It lists the five kinds of check, what runs where, how a model answer is graded, and a ledger of every failure we have turned into a check. <code>terminology.md</code> gains eight terms."], "files": ["pyproject.toml, requirements.txt and .gitignore", "Both setup files gain one pinned library, <code>hypothesis==6.115.0</code>. <code>pyproject.toml</code> also registers five markers and turns on <code>--strict-markers</code>. At the end of class the version moves to 0.6.0, and <code>.gitignore</code> ignores the <code>.hypothesis</code> folder."]};
+  function showDir(k) {
+    var d = DIRS[k];
+    $('#treeTitle').textContent = d[0];
+    $('#treeText').innerHTML = '<p style="margin:0">' + d[1] + '</p>';
+  }
+  $$('#treeBox button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('#treeBox button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      showDir(b.dataset.d);
+    });
+  });
+  showDir('root');
+
+  /* ---------- sorter ---------- */
+  function sorter(el, bins, items, doneMsg) {
+    var sel = null, left = items.length, wrong = 0;
+    var pool = document.createElement('div'); pool.className = 'pool';
+    var hint = document.createElement('p'); hint.className = 'hint';
+    var grid = document.createElement('div'); grid.className = 'bins';
+    var chips = [];
+    items.forEach(function (it) {
+      var c = document.createElement('button'); c.className = 'chip'; c.textContent = it.t; c.setAttribute('aria-pressed', 'false');
+      c.addEventListener('click', function () {
+        chips.forEach(function (x) { x.classList.remove('sel'); x.setAttribute('aria-pressed', 'false'); });
+        sel = it; c.classList.add('sel'); c.setAttribute('aria-pressed', 'true');
+        hint.className = 'hint'; hint.textContent = 'Now click the bin for this item.';
+      });
+      it.chip = c; chips.push(c); pool.appendChild(c);
+    });
+    bins.forEach(function (b) {
+      var d = document.createElement('button'); d.className = 'bin';
+      d.innerHTML = '<b>' + esc(b.label) + '</b><span class="why">' + esc(b.sub || '') + '</span><span class="placed"></span>';
+      d.addEventListener('click', function () {
+        if (!sel) { hint.className = 'hint'; hint.textContent = 'Click an item first, then a bin.'; return; }
+        var it = sel;
+        if (it.bin === b.k) {
+          var s = document.createElement('span'); s.textContent = it.t; $('.placed', d).appendChild(s);
+          pool.removeChild(it.chip); sel = null; left--;
+          hint.className = 'hint good'; hint.textContent = 'Correct. ' + it.why;
+          if (!left) {
+            var e = document.createElement('span'); e.className = 'empty'; e.textContent = 'All sorted.'; pool.appendChild(e);
+            hint.textContent = (wrong === 0 ? 'Perfect, with no mistakes. ' : 'All sorted, with ' + wrong + ' wrong ' + (wrong === 1 ? 'try' : 'tries') + '. ') + (doneMsg || '');
+          }
+        } else {
+          wrong++; d.classList.add('flash'); setTimeout(function () { d.classList.remove('flash'); }, 500);
+          hint.className = 'hint bad'; hint.textContent = 'Not quite. ' + (it.hint || 'Think about what went wrong.');
+        }
+      });
+      grid.appendChild(d);
+    });
+    el.appendChild(pool); el.appendChild(hint); el.appendChild(grid);
+  }
+  sorter($('#sortKinds'), [{"k": "par", "label": "Parametrize", "sub": "one check, many inputs"}, {"k": "fix", "label": "Fixture", "sub": "set-up a test asks for by name"}], [{"t": "The same check for five bad amounts", "bin": "par", "why": "One check with many inputs is exactly what parametrize is for. Each input becomes its own named test.", "hint": "Is it one rule with many values?"}, {"t": "A fresh empty folder for each test (tmp_path)", "bin": "fix", "why": "tmp_path is a fixture. pytest builds a new folder for the test that asks for it, and the real data is never touched.", "hint": "Is it set-up that a test asks for?"}, {"t": "Six model outcomes, each with a status and a call count", "bin": "par", "why": "The same test runs for six rows of a table. A failing row is named by its id, such as [refusal].", "hint": "Many rows, one test."}, {"t": "A function that writes a small cases.csv from rows you give it", "bin": "fix", "why": "A fixture can hand a test a helper. The test calls it with any rows, and the file lives in a temporary folder.", "hint": "It prepares something for the test."}, {"t": "Three digits from other scripts that must all be refused", "bin": "par", "why": "One rule, three values. If one of them is accepted, only that one is red.", "hint": "Same rule, different values."}, {"t": "A closed network for every test, without asking", "bin": "fix", "why": "An autouse fixture applies to every test without being named. It blocks the network, so a forgotten live call fails at once.", "hint": "Set-up that wraps each test."}], "Parametrize multiplies a check. A fixture prepares what a check needs.");
+
+  chipReadout('#closeChips .chip', '#closeOut', [["Unit", "Asks: does this one function do its job?", "Example: <code>parse_units(\"14\")</code> is 14."], ["Contract", "Asks: does this record, reply or log line have the promised shape?", "Example: a reply with an unknown key is refused. Marker: <code>contract</code>."], ["Regression", "Asks: has a failure we already saw come back?", "Example: <code>parse_units(\"&#1633;&#1634;\")</code> is refused. It was written after the bug was found."], ["End to end", "Asks: does a whole run, from files in to files out, behave?", "Example: the same input gives the same output files. These are the slowest, so we keep few."], ["Capability", "Asks: can the system do this harder thing yet? We may not pass it today.", "Example: case G-09, where the model quotes text that is not in its note. It is marked as an expected failure, and watched."]], 'It is:');
+
+  /* ---------- section 6 ---------- */
+  sorter($('#sortWrap'), [{"k": "bef", "label": "Before the fix", "sub": "the bug is still there"}, {"k": "aft", "label": "After the fix", "sub": "the bug is gone"}], [{"t": "The new regression test fails", "bin": "bef", "why": "A test that fails on the old code shows that it can catch the bug. That is the whole point of writing it first.", "hint": "Is the bug still in the code?"}, {"t": "The failure says DID NOT RAISE", "bin": "bef", "why": "It means the code accepted an input we expected it to refuse. That is the bug, said in four words.", "hint": "The code accepted something bad."}, {"t": "The new regression test passes", "bin": "aft", "why": "The same test, now green, is the evidence that the fix did its job.", "hint": "The bug has been fixed."}, {"t": "All 134 checks pass", "bin": "aft", "why": "We run everything after the fix, to be sure nothing else broke.", "hint": "Everything is run once the fix is in."}, {"t": "The output file fingerprints match the \"before\" picture", "bin": "aft", "why": "The fix must change what we refuse, and nothing else. Same fingerprints show that no result file moved.", "hint": "It is compared against the earlier picture."}, {"t": "Hypothesis shrinks a failing input to one character", "bin": "bef", "why": "A property test only finds a failure while the bug exists. It shrinks the input to the smallest one that still fails.", "hint": "It can only fail while the bug exists."}], 'The test fails first, then passes. Only then run everything.');
+
+  chipReadout('#stackChips .chip', '#stackOut', [["Units written as <code>12</code>", "Ordinary digits. They were accepted before the fix, and are accepted after.", "<strong>Accepted</strong> both times. A good fix keeps this working, so one of the tests checks it."], ["Units written as <code>&#1633;&#1634;</code>", "Arabic-Indic digits. <code>\\d</code> matches them, so the old pattern let them through.", "Before: <strong>accepted as 12</strong>. After: <strong>refused</strong>, with \"is not a whole number\"."], ["A case ID <code>C-&#1633;&#1634;&#1635;&#1636;</code>", "The case ID is checked by a second pattern, in <code>contracts.py</code>. It had the same mistake.", "Before: <strong>accepted</strong>. After: <strong>quarantined</strong>. This is why we search for the pattern and not only the line we found."], ["A date <code>&#1634;&#1632;&#1634;&#1637;-&#1632;&#1635;-&#1632;&#1639;</code>", "This one was refused even before the fix, but for the wrong reason: \"not a real calendar date\".", "Before: <strong>refused, wrongly explained</strong>. After: <strong>refused</strong>, with \"is not YYYY-MM-DD\"."]], 'The result:');
+
+  /* ---------- section 7 ---------- */
+  sorter($('#sortRetry'), [{"k": "ci", "label": "Every pull request (CI)", "sub": "free, no key, same every time"}, {"k": "hand", "label": "By hand, outside CI", "sub": "needs a key, may cost, may vary"}], [{"t": "ruff check .", "bin": "ci", "why": "It reads the code and needs nothing else, so it runs on every pull request.", "hint": "Does it need a key or the network?"}, {"t": "pytest with a fake model", "bin": "ci", "why": "The fake gives the same reply every time, so the result is the same every time.", "hint": "Is the model real?"}, {"t": "A live evaluation of 10 notes with a real key", "bin": "hand", "why": "It needs a key, costs money (up to 60 calls), and can vary. A person runs it on purpose, and reads it with care.", "hint": "Does it call a real model?"}, {"t": "mypy", "bin": "ci", "why": "It checks types without running the code. It is quick, and the same every time.", "hint": "Does it call anything outside?"}, {"t": "A check that a refusal ends after one call", "bin": "ci", "why": "A scripted fake refusal is enough to count the calls. No real model is involved.", "hint": "Can a fake do this job?"}, {"t": "A person scoring the golden set to calibrate a grader", "bin": "hand", "why": "It needs human judgement, which a workflow cannot give. It is the reference for anything automatic.", "hint": "Does it need a person?"}], 'Routine checks run on every change. Live model checks run by hand.');
+
+  chipReadout('#traceChips .chip', '#traceOut', [["Failed: DID NOT RAISE", "pytest expected an error, and the code did not raise one.", "Usually the bug itself: the code accepted something it should refuse. For a new regression test, this is the red you want to see."], ["assert 2 == 1", "A test counted two of something where it expected one.", "In class it is the number of model calls for a refusal: the code made a second, pointless call. Read the lines above to see why."], ["Passes on my laptop, red in CI", "CI starts from an empty machine and installs only what <code>requirements.txt</code> lists.", "Often a package you installed by hand and never listed. Add it to <code>requirements.txt</code>, so laptops and CI agree."], ["[XPASS(strict)]", "A test marked as an expected failure has started to pass.", "Red on purpose. The gap has closed, so remove the marker, move the case into the regression suite, and raise the floor."], ["'regresion' not found in markers", "A marker was misspelled, and <code>--strict-markers</code> refused to start.", "Good news: without that setting, the typo would have been accepted and the test never selected. Fix the spelling."]], 'What it means:');
+
+  /* ---------- quiz ---------- */
+  function quiz(el, items, scoreEl) {
+    var answered = 0, right = 0;
+    items.forEach(function (it, qi) {
+      var q = document.createElement('div'); q.className = 'q';
+      var p = document.createElement('p'); p.className = 'qt'; p.textContent = (qi + 1) + '. ' + it.q; q.appendChild(p);
+      var fb = document.createElement('div'); fb.className = 'fb';
+      var btns = [];
+      it.o.forEach(function (txt, oi) {
+        var b = document.createElement('button'); b.className = 'opt'; b.textContent = txt; btns.push(b);
+        b.addEventListener('click', function () {
+          if (btns.some(function (x) { return x.disabled; })) return;
+          btns.forEach(function (x) { x.disabled = true; });
+          answered++;
+          if (oi === it.a) { b.classList.add('right'); right++; fb.textContent = 'Correct. ' + it.e; fb.style.color = 'var(--ok)'; }
+          else { b.classList.add('wrong'); btns[it.a].classList.add('right'); fb.textContent = 'Not quite. ' + it.e; fb.style.color = 'var(--bad)'; }
+          if (scoreEl && answered === items.length) {
+            scoreEl.textContent = 'You got ' + right + ' of ' + items.length + '. ' + (right === items.length ? 'Great work.' : 'Re-read the sections for any you missed, then reload the page to try again.');
+          }
+        });
+        q.appendChild(b);
+      });
+      q.appendChild(fb); el.appendChild(q);
+    });
+  }
+  quiz($('#finalQuiz'), [{"q": "A check loops over five bad values, and the third is wrongly accepted. What does a loop inside one test report?", "o": ["Four passes and one failure, naming the value", "One failure with no value named, and the last two values never checked", "Five failures, one for each value", "Only a warning"], "a": 1, "e": "A loop is one test. The first failure ends it, and pytest does not print the loop variable. Parametrize makes five tests, so every value runs and the failing one is named."}, {"q": "You write a regression test and run it before the fix. It passes. What is the safest conclusion?", "o": ["The bug is fixed, so we are done", "The test does not reproduce the bug, so change it before fixing anything", "Passing tests are always good", "The bug only happens in CI"], "a": 1, "e": "A regression test earns its place by failing on the old code and passing on the new. A test that passes before the fix cannot say whether the fix worked."}, {"q": "All checks pass on your laptop. CI is red because it cannot find <code>hypothesis</code>. What is the most likely cause?", "o": ["GitHub Actions is broken today", "The package is installed on your laptop but not listed in requirements.txt", "pytest does not support Hypothesis in CI", "The pull request template is missing"], "a": 1, "e": "CI starts from an empty machine and installs only what requirements.txt lists. This is one reason CI exists: it finds what your machine was hiding."}, {"q": "A model replies with a refusal. Why does the Workbench stop after one call instead of repairing?", "o": ["Repair calls are not allowed in live mode", "A refusal is a decision by the model, not a formatting mistake, so asking again does not help", "The refusal is saved for reuse", "A fake model can only be called once"], "a": 1, "e": "The repair is for replies that are not valid JSON. A refusal is valid text that says no, so a second call would only get another no, and it would cost a call and tokens."}, {"q": "A test is marked <code>xfail(strict=True)</code>. After a change, the test starts to pass. What does pytest report?", "o": ["A pass, in green", "A skip, with a note", "A failure (XPASS strict), so the team notices the gap has closed", "Nothing, because xfail tests are not run"], "a": 2, "e": "An xfail test is expected to fail. If it passes, something we thought untrue has become true. With strict=True that is a failure on purpose, so someone looks, and the case joins the regression suite."}], $('#finalScore'));
+
+  /* checklist: tick, and remember in this browser */
+  var checkDone = {};
+  try { checkDone = JSON.parse(localStorage.getItem('c7preread-checks') || '{}') || {}; } catch (e) { checkDone = {}; }
+  $$('#finalChecks li').forEach(function (li) {
+    var ck = $('.ck', li);
+    var tx = document.createElement('span'); tx.className = 'tx';
+    while (ck.nextSibling) tx.appendChild(ck.nextSibling);
+    li.appendChild(tx);
+    li.style.cursor = 'pointer';
+    function paint(on) { li.classList.toggle('done', on); ck.textContent = on ? '✓' : ''; }
+    paint(!!checkDone[li.dataset.check]);
+    li.addEventListener('click', function () {
+      checkDone[li.dataset.check] = !checkDone[li.dataset.check];
+      paint(!!checkDone[li.dataset.check]);
+      try { localStorage.setItem('c7preread-checks', JSON.stringify(checkDone)); } catch (e) { /* ignore */ }
+    });
+  });
+
+  /* nav highlight while scrolling */
+  try {
+    var secs = $$('section.card'), links = $$('nav a');
+    window.addEventListener('scroll', function () {
+      var cur = secs[0].id;
+      secs.forEach(function (s) { if (s.getBoundingClientRect().top < 160) cur = s.id; });
+      links.forEach(function (a) { a.style.fontWeight = a.dataset.s === cur ? '700' : '400'; });
+    }, { passive: true });
+  } catch (e) { /* ignore */ }
+})();
+</script>
+</body>
+</html>
